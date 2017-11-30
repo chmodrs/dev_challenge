@@ -1,20 +1,18 @@
 ---
-- hosts: slavejenkins2
+- hosts: git
   vars:
   - warName: app.war
-  - warRemotePath: /app/
+  - warRemotePath: /app
   - logFile: /var/log/application.log
 
   tasks:
+
   - name: Delete existent war file
     file: path={{ warRemotePath }}/{{ warName }} state=absent
 
   - name: Download WAR to server
-    command: wget http://example.com/file.war -O {{ warRemotePath }}/{{ warName }}
-
-  - name: Stop Java Application
-    command: pkill -f 'java -jar'
-   
+    command: wget https://dev.segware.com.br/jenkins/job/indicare/lastSuccessfulBuild/artifact/target/indicare-0.0.1-SNAPSHOT.war -O {{ warRemotePath }}/{{ warName }}
+ 
   - name: Start Application and save output to logfile
     command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
 
