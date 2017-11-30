@@ -11,7 +11,7 @@
     file: path={{ warRemotePath }}/{{ warName }} state=absent
 
   - name: Download WAR to server
-    command: wget https://dev.segware.com.br/jenkins/job/indicare/lastSuccessfulBuild/artifact/target/indicare-0.0.1-SNAPSHOT.war -O {{ warRemotePath }}/{{ warName }}
+    command: wget https://jenkinsserver.myserver.com/application.war -O {{ warRemotePath }}/{{ warName }}
  
   - name: Start Application and save output to logfile
     command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
