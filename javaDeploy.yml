@@ -1,0 +1,20 @@
+---
+- hosts: slavejenkins2
+  vars:
+  - warName: app.war
+  - warRemotePath: /app/
+  - logFile: /var/log/application.log
+
+  tasks:
+  - name: Delete existent war file
+    file: path={{ warRemotePath }}/{{ warName }} state=absent
+
+  - name: Download WAR to server
+    command: wget http://example.com/file.war -O {{ warRemotePath }}/{{ warName }}
+
+  - name: Stop Java Application
+    command: pkill -f 'java -jar'
+   
+  - name: Start Application and save output to logfile
+    command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
+
