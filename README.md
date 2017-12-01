@@ -58,3 +58,24 @@ echo "---" > /etc/ansible/group_vars/servers
 echo "ansible_ssh_user: usuario" >> /etc/ansible/group_vars/servers
 echo "ansible_ssh_pass: senha" >> /etc/ansible/group_vars/servers
 ```
+Crie o arquivo /etc/ansible/deployJava.yml (ou outro nome de sua escolha) e adicione as seguintes linhas
+
+```
+---
+- hosts: servers
+  vars:
+  - warName: app.war
+  - warRemotePath: /app
+  - logFile: /var/log/application.log
+
+  tasks:
+
+  - name: Delete existent war file
+    file: path={{ warRemotePath }}/{{ warName }} state=absent
+
+  - name: Download WAR to server
+    command: wget https://jenkinsserver.myserver.com/application.war -O {{ warRemotePath }}/{{ warName }}
+ 
+  - name: Start Application and save output to logfile
+    command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
+```
