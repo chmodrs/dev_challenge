@@ -4,9 +4,9 @@ Visto que o processo de deploy atualmente é trabalhoso e inseguro, já que FTP 
 sugerimos a utilização de um repositório onde essas aplicações sejam armazenadas de forma segura e de fácil acesso e o mais importante, somente para pessoas autorizadas.
 
 Então para isso, vamos criar um bucket no S3 na Amazon que poderá ser montado em qualquer servidor utilizando credenciais IAM. Após a montagem, o mesmo poderá ser acessível
-em diretório, vamos utilizar como exemplo nesse documento o diretório "/mnt/s3app".
+em um diretório configurável, vamos utilizar como exemplo nesse documento o diretório "/mnt/s3app".
 
-E criação de um bucket S3 nos traz algumas vantagens principais como:
+A criação de um bucket S3 nos traz algumas vantagens principais como:
 
 * Maior disponibilidade, visto que o S3 é replicado para diversas zonas dentro da AWS;
 * Maior velocidade para download e upload dos arquivos;
