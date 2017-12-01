@@ -31,7 +31,7 @@ ele é amplamente utilizado pela sua facilidade de instalação e utilização. 
 vamos utilizar um playbook para automatizar o processo de deploy da nossa aplicação Java.
 
 Para instalar o Ansible em servidores RedHat like:
-,,,
+```
 yum install epel-release
 yum install ansible
-,,,
+```
