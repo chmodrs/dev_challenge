@@ -35,3 +35,18 @@ Para instalar o Ansible em servidores RedHat like:
 yum install epel-release
 yum install ansible
 ```
+
+Para instalar o Ansible em servidores Debian like:
+```
+echo 'deb http://http.debian.net/debian jessie-backports main' > /etc/apt/sources.list.d/backports.list
+apt-get update
+apt-get -t jessie-backports install "ansible"
+```
+
+Após a instalação do Ansible, configure os servidores que rodarão a aplicação Java no arquivo /etc/ansible/hosts
+
+```
+[app-servers]
+servidor1 ansible_ssh_host=192.168.10.100
+servidor2 ansible_ssh_host=192.168.10.200
+```
