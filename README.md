@@ -1,9 +1,10 @@
-# Auto Deploy
+# 1. Auto Deploy
 
-Visto que o processo de deploy atualmente é trabalhoso e inseguro, já que FTP não é uma ferramenta ideal para trabalhar com o manuseio e armazenamento de aplicações de produção
-sugerimos a utilização de um repositório onde essas aplicações sejam armazenadas de forma segura e de fácil acesso e o mais importante, somente para pessoas autorizadas.
+Visando a diminuição do tempo de deploy das aplicações recebidas pela fábrica de software, definimos duas alternativas para subir essas aplicações para produção, uma utilizando o servidor ftp já existente
+e automatizando o processo final, e a outra utilizando um repositório onde essas aplicações sejam armazenadas de forma segura, de fácil acesso e o mais importante, somente para pessoas autorizadas e sem alterar a 
+esteira de build. As alternativas utilizarão tecnologias distintas, a primeira utiliza Ansible e a segunda Docker.
 
-Então para isso, vamos criar um bucket no S3 na Amazon que poderá ser montado em qualquer servidor utilizando credenciais IAM. Após a montagem, o mesmo poderá ser acessível
+A segunda alternativa vamos criar um bucket no S3 na Amazon que poderá ser montado em qualquer servidor utilizando credenciais IAM. Após a montagem, o mesmo poderá ser acessível
 em um diretório configurável, vamos utilizar como exemplo nesse documento o diretório "/mnt/s3app".
 
 A criação de um bucket S3 nos traz algumas vantagens principais como:
@@ -20,9 +21,17 @@ pelo Jenkins ele já é armazenado automaticamente via plugin s3 em diretórios 
 
 Esses buckets também estão montados nos servidores de aplicação e também recebem automaticamente os novos deploys.
 
-Analisando o cenário descrito acima, definimos duas formas de automatizar esse processo de deploy: via ansible ou via docker
+Abaixo vamos descrever os passos necessários em cada uma das alternativas.
 
 
+## Ansible
 
+O Ansible é uma ferramenta para facilitar o provisionamento de servidores, gerenciamento de configurações e deploy de aplicações. Como não precisa de um agent para fazer as tarefas nos servidores remotos
+ele é amplamente utilizado pela sua facilidade de instalação e utilização. Com ele é possível utilizar pequenos comandos, como criar vários procedimentos e executá-los de uma só vez (playbook). Em nosso caso
+vamos utilizar um playbook para automatizar o processo de deploy da nossa aplicação Java.
 
-
+Para instalar o Ansible em servidores RedHat like:
+,,,
+yum install epel-release
+yum install ansible
+,,,
