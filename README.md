@@ -74,7 +74,7 @@ Crie o arquivo /etc/ansible/deployJava.yml (ou outro nome de sua escolha) e adic
     file: path={{ warRemotePath }}/{{ warName }} state=absent
 
   - name: Download WAR to server
-    command: wget https://jenkinsserver.myserver.com/application.war -O {{ warRemotePath }}/{{ warName }}
+    command: wget ftp://jenkinsaplications.mycompany.com/application.war -O {{ warRemotePath }}/{{ warName }}
  
   - name: Start Application and save output to logfile
     command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
