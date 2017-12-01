@@ -28,7 +28,7 @@ Abaixo vamos descrever os passos necessários em cada uma das alternativas.
 
 O Ansible é uma ferramenta para facilitar o provisionamento de servidores, gerenciamento de configurações e deploy de aplicações. Como não precisa de um agent para fazer as tarefas nos servidores remotos
 ele é amplamente utilizado pela sua facilidade de instalação e utilização. Com ele é possível utilizar pequenos comandos, como criar vários procedimentos e executá-los de uma só vez (playbook). Em nosso caso
-vamos utilizar um playbook para automatizar o processo de deploy da nossa aplicação Java.
+vamos utilizar um playbook para automatizar o processo de deploy da nossa aplicação Java. O Ansible não necessita de agentes para executar seus jobs, tudo é feito via SSH.
 
 Para instalar o Ansible em servidores RedHat like:
 ```
@@ -49,4 +49,12 @@ Após a instalação do Ansible, configure os servidores que rodarão a aplicaç
 [app-servers]
 servidor1 ansible_ssh_host=192.168.10.100
 servidor2 ansible_ssh_host=192.168.10.200
+```
+Configure o usuário e senha com permissões e acesso a máquina via SSH
+```
+mkdir -p /etc/ansible/group_vars
+touch /etc/ansible/group_vars/servers
+echo "---" > /etc/ansible/group_vars/servers
+echo "ansible_ssh_user: usuario" >> /etc/ansible/group_vars/servers
+echo "ansible_ssh_pass: senha" >> /etc/ansible/group_vars/servers
 ```
