@@ -75,6 +75,9 @@ Crie o arquivo /etc/ansible/deployJava.yml (ou outro nome de sua escolha) e adic
 
   - name: Download WAR to server
     command: wget ftp://jenkinsaplications.mycompany.com/application.war -O {{ warRemotePath }}/{{ warName }}
+  
+   - name: Stop Java Application
+    command: pkill -f 'java -jar'
  
   - name: Start Application and save output to logfile
     command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
