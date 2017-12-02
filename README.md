@@ -88,3 +88,51 @@ Crie o arquivo /etc/ansible/deployJava.yml (ou outro nome de sua escolha) e adic
   - name: Start Application and save output to logfile
     command: /usr/bin/java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
 ```
+
+## Docker
+
+Para rodar uma aplicação java via docker é bem simples, basta instalarmos e configurarmos o docker e o docker-compose em seu servidor que rodará a aplicação com os comandos abaixo:
+
+```
+curl -fsSL https://get.docker.com/ | sh
+systemctl start docker
+systemctl enable docker
+usermod -aG docker $(whoami)
+usermod -aG docker yourusername
+```
+
+```
+pip install docker-compose
+```
+
+Após isso crie um arquivo com o nome "docker-compose.yml" com o seguinte conteúdo
+```
+appjava:
+ image: bankmonitor/spring-boot:latest-war
+ container_name: appjava
+ hostname: appjava
+ volumes:
+ - /app:/app
+ env_file:
+  - ./java.env
+```
+
+Lembrando que a sua aplicação dentro do container tem que estar dentro do diretório "/app" com o nome "app.war", interessante é ter esse diretório criado no host para não confundir.
+
+Crie um arquivo com as variáveis de ambiente da sua aplicação com o nome "java.env"
+
+```
+SPRING_PROFILES_ACTIVE=prod
+```
+
+Após isso basta rodar o container com os comandos abaixo, no mesmo diretório do seu docker-compose-yml e java.env
+
+```
+docker-compose build
+docker-compose up -d
+```
+
+Essa tarefa de rodar os comandos para inicializar o container pode ser facilmente feita do seu servidor Ansible.
+
+
+______________________________________________________________________________________________________________________________________________________________________________________________
