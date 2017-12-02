@@ -11,11 +11,17 @@
     file: path={{ warRemotePath }}/{{ warName }} state=absent
 
   - name: Download WAR to server
-    command: wget ftp://jenkinsaplications.mycompany.com/application.war -O {{ warRemotePath }}/{{ warName }}
+    command: wget https://dev.segware.com.br/jenkins/job/indicare/lastSuccessfulBuild/artifact/target/indicare-0.0.1-SNAPSHOT.war -O {{ warRemotePath }}/{{ warName }}
 
-  - name: Stop Java Application
+  - name: Status of Java Process
+    shell: ps -ef |  grep jar | grep -v grep
+    register: process_list
+    changed_when: false
+
+  - name: Kill "Java" if process running
     command: pkill -f 'java -jar'
+    when: "process_list.stdout.find('java -jar') == 1"
  
   - name: Start Application and save output to logfile
-    command: java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
+    command: /usr/bin/java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
 
