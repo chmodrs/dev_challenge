@@ -258,6 +258,30 @@ nginx -t
 systemctl reload nginx
 ```
 
+# 3. NGINX Monitor
 
+Para monitorar nossa aplicação, vamos utilizar um script que será agendado no crontab para validar de minuto em minuto se a aplicação está disponível
+em nosso caso, o JSON retorna status 200, então nosso script irá fazer essa validação, e caso retorne um valor diferente disso, nos envia um alerta por e-mail.
 
+Nesse caso estamos considerando que seu servidor já está com o sendmail instalado e configurado.
 
+```
+#!/bin/bash
+
+url="myopenshift.com"
+status_code=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' $url)
+date=`date`
+
+if [ $status_code -ne "200" ]
+then
+        echo "status check failed at $date" | mail -s "Nginx fail" user@email.com
+        #You can add further actions here
+fi
+```
+
+Você pode adicionar uma entrada no crontab dessa forma para verificação a cada 30seg, se quiser verificar a cada minuto, basta usar apenas a primeira linha.
+
+```
+* * * * * /etc/init.d/monitor-nginx.sh
+* * * * * ( sleep 30 ; /etc/init.d/monitor-nginx.sh )
+```
