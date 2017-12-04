@@ -234,3 +234,30 @@ Proxy reverso, fazendo o encaminhamento dessas requisições.
 yum install -y nginx
 ```
 
+Criar o arquivo /etc/nginx/conf.d/default.conf com o seguinte conteúdo, alterando somente o IP da sua interface web do minishift
+
+```
+server {
+        listen 8443;
+        server_name _;
+
+      location / {
+	  proxy_set_header Host $host;
+	  proxy_set_header X-Real-IP $remote_addr;
+          proxy_pass https://192.168.42.7:8443/;
+	  proxy_set_header Connection "";
+ 	  proxy_read_timeout 180s;
+        }
+     }
+```
+
+Após isso faça o reload das configurações no nginx e seu Minishift já estará funcionando no endereço http://iphostserver:8443
+
+```
+nginx -t
+systemctl reload nginx
+```
+
+
+
+
