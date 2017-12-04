@@ -88,6 +88,11 @@ Crie o arquivo /etc/ansible/deployJava.yml (ou outro nome de sua escolha) e adic
   - name: Start Application and save output to logfile
     command: /usr/bin/java -jar {{ warRemotePath }}/{{ warName }} > {{ logFile }}
 ```
+E execute o Ansible para fazer o deploy da aplicação
+
+```
+ansible-playbook -l appserver javaDeploy.yml
+```
 
 ## Docker
 
@@ -140,3 +145,92 @@ ________________________________________________________________________________
 
 
 # 2. Minishift
+
+OpenShift é uma plataforma PAAS desenvolvida pela RedHat onde podemos criar nossa nuvem privada, com a finalidade de fazer deploy, teste e gerenciamento de aplicações, tanto para homologação
+quanto para produção. Trabalha com containers docker, facilitando assim a portabilidade das suas aplicações. O Minishift é uma plataforma que utiliza máquinas virtuais para prover uma arquitetura
+semelhante ao OpenShift localmente em qualquer servidor Linux ou Windows.
+
+Nesse documento vamos abordar a instalação do Minishit em uma distribuição Centos 7.
+
+Faça o download dos pré-requisitos utilizados pelo minishift
+
+```
+yum install -y qemu-kvm
+yum install -y kvm
+curl -L https://github.com/dhiltgen/docker-machine-kvm/releases/download/v0.7.0/docker-machine-driver-kvm -o /usr/local/bin/docker-machine-driver-kvm
+chmod +x /usr/local/bin/docker-machine-driver-kvm
+systemctl start libvirtd
+```
+
+Faça o download do Minishift
+
+```
+wget https://github.com/minishift/minishift/releases/download/v1.9.0/minishift-1.9.0-linux-amd64.tgz
+tar xvf minishift-1.9.0-linux-amd64.tgz
+cp minishift /usr/bin/
+```
+
+Após o processo acima, o minishift já deverá estar disponível para ser executado
+
+```
+[root@server ~]# minishift
+Minishift is a command-line tool that provisions and manages single-node OpenShift clusters optimized for development workflows.
+
+Usage:
+  minishift [command]
+
+Available Commands:
+  addons      Manages Minishift add-ons.
+  config      Modifies Minishift configuration properties.
+  console     Opens or displays the OpenShift Web Console URL.
+  delete      Deletes the Minishift VM.
+  docker-env  Sets Docker environment variables.
+  help        Help about any command
+  hostfolder  Manages host folders for the OpenShift cluster.
+  ip          Gets the IP address of the running cluster.
+  logs        Gets the logs of the running OpenShift cluster.
+  oc-env      Sets the path of the 'oc' binary.
+  openshift   Interacts with your local OpenShift cluster.
+  profile     Manages Minishift profiles.
+  ssh         Log in to or run a command on a Minishift VM with SSH.
+  start       Starts a local OpenShift cluster.
+  status      Gets the status of the local OpenShift cluster.
+  stop        Stops the running local OpenShift cluster.
+  update      Updates Minishift to the latest version.
+  version     Gets the version of Minishift.
+
+Flags:
+      --alsologtostderr                  log to standard error as well as files
+  -h, --help                             help for minishift
+      --log_backtrace_at traceLocation   when logging hits line file:N, emit a stack trace (default :0)
+      --log_dir string                   If non-empty, write log files in this directory (default "")
+      --logtostderr                      log to standard error instead of files
+      --profile string                   Profile name (default "minishift")
+      --show-libmachine-logs             Show logs from libmachine.
+      --stderrthreshold severity         logs at or above this threshold go to stderr (default 2)
+  -v, --v Level                          log level for V logs
+      --vmodule moduleSpec               comma-separated list of pattern=N settings for file-filtered logging
+
+Use "minishift [command] --help" for more information about a command.
+```
+
+O Minishift utiliza o KVM para instanciar seus containers, desta forma o Sistema Operacional irá criar interfaces de redes específicas as maquinas virtuais KVM.
+
+Faça o start do ambiente Minishift
+
+```
+minishift start
+```
+
+Você deverá receber no final uma mensagem informando a interface que o web console estará disponível
+
+- The server is accessible via web console at:
+    https://192.168.42.7:8443
+
+Por padrão não existe um portforward encaminhando as requisições do seu servidor Centos para a interface do Minishift, para corrigir isso vamos instalar um
+Proxy reverso, fazendo o encaminhamento dessas requisições.
+
+```
+yum install -y nginx
+```
+
